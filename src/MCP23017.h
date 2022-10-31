@@ -14,27 +14,27 @@ enum MCP23017RegisterAddr
 };
 
 #define PORTA IODIRA // I/O configuration bits for port A
-#define GPA0 1 << 0 // PortA bit 0
-#define GPA1 1 << 1 // PortA bit 1
-#define GPA2 1 << 2 // PortA bit 2
-#define GPA3 1 << 3 // PortA bit 3
-#define GPA4 1 << 4 // PortA bit 4
-#define GPA5 1 << 5 // PortA bit 5
-#define GPA6 1 << 6 // PortA bit 6
-#define GPA7 1 << 7 // PortA bit 7
+#define GPA0 1 << 0  // PortA bit 0
+#define GPA1 1 << 1  // PortA bit 1
+#define GPA2 1 << 2  // PortA bit 2
+#define GPA3 1 << 3  // PortA bit 3
+#define GPA4 1 << 4  // PortA bit 4
+#define GPA5 1 << 5  // PortA bit 5
+#define GPA6 1 << 6  // PortA bit 6
+#define GPA7 1 << 7  // PortA bit 7
 
 #define PORTB IODIRB // I/O configuration bits for port B
-#define GPB0 1 << 0 // PortB bit 0
-#define GPB1 1 << 1 // PortB bit 1
-#define GPB2 1 << 2 // PortB bit 2
-#define GPB3 1 << 3 // PortB bit 3
-#define GPB4 1 << 4 // PortB bit 4
-#define GPB5 1 << 5 // PortB bit 5
-#define GPB6 1 << 6 // PortB bit 6
-#define GPB7 1 << 7 // PortB bit 7
+#define GPB0 1 << 0  // PortB bit 0
+#define GPB1 1 << 1  // PortB bit 1
+#define GPB2 1 << 2  // PortB bit 2
+#define GPB3 1 << 3  // PortB bit 3
+#define GPB4 1 << 4  // PortB bit 4
+#define GPB5 1 << 5  // PortB bit 5
+#define GPB6 1 << 6  // PortB bit 6
+#define GPB7 1 << 7  // PortB bit 7
 
 #define ALL_OUTPUT 0x00 // Byte value for all output (to be used with `portMode()`)
-#define ALL_INPUT 0xFF // Byte value for all input (to be used with `portMode()`)
+#define ALL_INPUT 0xFF  // Byte value for all input (to be used with `portMode()`)
 
 #define I2C_CONNECTION_OK 0
 
