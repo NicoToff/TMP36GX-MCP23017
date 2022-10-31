@@ -1,14 +1,19 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-enum MCP23017Port
+enum MCP23017ConfPort
 {
-    IODIRA,
-    IODIRB
+    IODIRA, // I/O configuration bits for port A
+    IODIRB  // I/O configuration bits for port A
+};
+
+enum MCP23017RegisterAddr
+{
+    GPIOA = 0x12, // PortA reg addr
+    GPIOB = 0x13  // PortB reg addr
 };
 
 #define PORTA IODIRA
-#define GPIOA 0x12 // PortA reg addr
 #define GPA0 1 << 0
 #define GPA1 1 << 1
 #define GPA2 1 << 2
@@ -19,7 +24,6 @@ enum MCP23017Port
 #define GPA7 1 << 7
 
 #define PORTB IODIRB
-#define GPIOB 0x13 // PortB reg addr
 #define GPB0 1 << 0
 #define GPB1 1 << 1
 #define GPB2 1 << 2
@@ -40,16 +44,17 @@ private:
     byte address;
 
 public:
-    MCP23017(uint8_t address)
+    MCP23017(byte address)
     {
         this->address = address;
     };
-    MCP23017(uint8_t a0, uint8_t a1, uint8_t a2)
+
+    MCP23017(byte a0, byte a1, byte a2)
     {
         this->address = 0x20 | (a0 << 0) | (a1 << 1) | (a2 << 2);
     };
 
-    void portMode(MCP23017Port port, uint8_t mode)
+    void portMode(MCP23017ConfPort port, byte mode)
     {
         do
         {
@@ -58,22 +63,31 @@ public:
             Wire.write(mode);
         } while (Wire.endTransmission() != I2C_CONNECTION_OK);
     };
-    void portWrite(MCP23017Port port, uint8_t value)
+    void portWrite(MCP23017ConfPort port, byte value)
     {
-        byte destPort;
+        byte registerAddr;
         switch (port)
         {
         case PORTA:
-            destPort = GPIOA;
+            registerAddr = GPIOA;
             break;
         case PORTB:
-            destPort = GPIOB;
+            registerAddr = GPIOB;
             break;
         }
         do
         {
             Wire.beginTransmission(address);
-            Wire.write(destPort);
+            Wire.write(registerAddr);
+            Wire.write(value);
+        } while (Wire.endTransmission() != I2C_CONNECTION_OK);
+    };
+    void portWrite(MCP23017RegisterAddr registerAddr, byte value)
+    {
+        do
+        {
+            Wire.beginTransmission(address);
+            Wire.write(registerAddr);
             Wire.write(value);
         } while (Wire.endTransmission() != I2C_CONNECTION_OK);
     };

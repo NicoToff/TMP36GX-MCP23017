@@ -11,7 +11,7 @@ float getTempC(byte pin, int offset = 0, float maxVoltage = 3.3, int resolution 
 {
     uint16_t read = analogRead(TMP36) + offset;
     float voltage = read * (maxVoltage / resolution);
-    float temperatureC = (voltage - 0.5) * 100.0;
+    float temperatureC = (voltage - 0.4) * 100.0; // -40°C à 125°C
     return temperatureC;
 }
 
@@ -29,7 +29,7 @@ void setup()
 
 void loop()
 {
-    float temp = getTempC(TMP36, 110);
+    float temp = getTempC(TMP36);
     Serial.print(" Temperature (C): ");
     Serial.println(temp);
 
