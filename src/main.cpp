@@ -15,6 +15,11 @@ float getTempC(byte pin, int offset = 0, float maxVoltage = 3.3, int resolution 
     return temperatureC;
 }
 
+byte getTempMask(float temp)
+{
+    return (temp >= 20.0 ? GPA7 : 0) | (temp >= 21.0 ? GPA6 : 0) | (temp >= 22.0 ? GPA5 : 0) | (temp >= 23.0 ? GPA4 : 0) | (temp >= 24.0 ? GPA3 : 0) | (temp >= 25.0 ? GPA2 : 0) | (temp >= 26.0 ? GPA1 : 0) | (temp >= 27.0 ? GPA0 : 0);
+}
+
 MCP23017 mcp(HIGH, HIGH, HIGH);
 
 void setup()
@@ -30,10 +35,11 @@ void setup()
 void loop()
 {
     float temp = getTempC(TMP36);
+    
     Serial.print(" Temperature (C): ");
     Serial.println(temp);
 
-    byte mask = (temp >= 20.0 ? GPA7 : 0) | (temp >= 21.0 ? GPA6 : 0) | (temp >= 22.0 ? GPA5 : 0) | (temp >= 23.0 ? GPA4 : 0) | (temp >= 24.0 ? GPA3 : 0) | (temp >= 25.0 ? GPA2 : 0) | (temp >= 26.0 ? GPA1 : 0) | (temp >= 27.0 ? GPA0 : 0);
+    byte mask = getTempMask(temp);
 
     mcp.portWrite(PORTA, mask);
 
