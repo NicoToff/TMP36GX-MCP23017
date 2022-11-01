@@ -25,9 +25,15 @@ float getTempC(byte pin, int offset = 0, float maxVoltage = 3.3, int resolution 
 
 byte getTempMask(float temp)
 {
-    // @formatter:off
     return (
-        WHITE_LED // Always on
-        | (temp >= 18.0 ? BLUE_LED1 : 0) | (temp >= 19.0 ? BLUE_LED2 : 0) | (temp >= 20.0 ? GREEN_LED1 : 0) | (temp >= 21.0 ? GREEN_LED2 : 0) | (temp >= 22.0 ? YELLOW_LED1 : 0) | (temp >= 24.0 ? YELLOW_LED2 : 0) | (temp >= 27.0 ? RED_LED : 0));
+        WHITE_LED                          // Always on
+        | (temp >= 18.0 ? BLUE_LED1 : 0)   //
+        | (temp >= 19.0 ? BLUE_LED2 : 0)   //
+        | (temp >= 20.0 ? GREEN_LED1 : 0)  //
+        | (temp >= 21.0 ? GREEN_LED2 : 0)  //
+        | (temp >= 22.0 ? YELLOW_LED1 : 0) //
+        | (temp >= 24.0 ? YELLOW_LED2 : 0) //
+        | (temp >= 27.0 ? RED_LED : 0)     //
+    );
 }
 #endif
