@@ -1,3 +1,6 @@
+#ifndef MCP23017_H
+#define MCP23017_H
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -93,3 +96,4 @@ public:
     };
     uint8_t digitalRead(uint8_t pin);
 };
+#endif
