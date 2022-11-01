@@ -5,6 +5,7 @@
 #include "MCP23017.h"
 
 #define TMP36 35
+#define FACTORY_TMP36_OFFSET -0.5
 
 #define WHITE_LED GPA7
 #define BLUE_LED1 GPA6
@@ -15,11 +16,12 @@
 #define YELLOW_LED2 GPA1
 #define RED_LED GPA0
 
-float getTempC(byte pin, int offset = 0, double maxVoltage = 3.3, int resolution = 4096)
-{
-    uint16_t read = analogRead(TMP36) + offset;
+float getTempC(byte pin, int mVoltOffset = 0, double maxVoltage = 3.3, int resolution = 4096)
+{    
+    uint16_t read = analogRead(TMP36);
     float voltage = (float)read * (maxVoltage / resolution);
-    float temperatureC = (voltage - 0.4) * 100.0; // -40°C à 125°C
+    float offsetVoltage = voltage + (mVoltOffset / 1000.0) + FACTORY_TMP36_OFFSET;
+    float temperatureC = offsetVoltage * 100.0;
     return temperatureC;
 }
 
