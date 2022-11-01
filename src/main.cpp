@@ -3,9 +3,17 @@
 #include "MCP23017.h"
 
 #define I2C_ADDRESS 0x27
-#define I2C_CONNECTION_OK 0
 
 #define TMP36 35
+
+#define WHITE_LED GPA7
+#define BLUE_LED1 GPA6
+#define BLUE_LED2 GPA5
+#define GREEN_LED1 GPA4
+#define GREEN_LED2 GPA3
+#define YELLOW_LED1 GPA2
+#define YELLOW_LED2 GPA1
+#define RED_LED GPA0
 
 float getTempC(byte pin, int offset = 0, float maxVoltage = 3.3, int resolution = 4096)
 {
@@ -17,7 +25,16 @@ float getTempC(byte pin, int offset = 0, float maxVoltage = 3.3, int resolution 
 
 byte getTempMask(float temp)
 {
-    return (temp >= 20.0 ? GPA7 : 0) | (temp >= 21.0 ? GPA6 : 0) | (temp >= 22.0 ? GPA5 : 0) | (temp >= 23.0 ? GPA4 : 0) | (temp >= 24.0 ? GPA3 : 0) | (temp >= 25.0 ? GPA2 : 0) | (temp >= 26.0 ? GPA1 : 0) | (temp >= 27.0 ? GPA0 : 0);
+    return (
+        WHITE_LED // Always on
+        | (temp >= 18.0 ? BLUE_LED1   : 0)
+        | (temp >= 19.0 ? BLUE_LED2   : 0)
+        | (temp >= 20.0 ? GREEN_LED1  : 0)
+        | (temp >= 21.0 ? GREEN_LED2  : 0)
+        | (temp >= 22.0 ? YELLOW_LED1 : 0)
+        | (temp >= 24.0 ? YELLOW_LED2 : 0)
+        | (temp >= 27.0 ? RED_LED     : 0)
+    );
 }
 
 MCP23017 mcp(HIGH, HIGH, HIGH);
