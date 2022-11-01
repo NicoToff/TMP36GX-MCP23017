@@ -36,36 +36,61 @@ enum MCP23017RegisterAddr
 #define GPB6 1 << 6  // PortB bit 6
 #define GPB7 1 << 7  // PortB bit 7
 
-#define ALL_OUTPUT 0x00 // Byte value for all output (to be used with `portMode()`)
-#define ALL_INPUT 0xFF  // Byte value for all input (to be used with `portMode()`)
+#define ALL_OUTPUT 0x00 // Byte value for all pins as output (to be used with `portMode()`)
+#define ALL_INPUT 0xFF  // Byte value for all pins as input (to be used with `portMode()`)
+#define ALL_HIGH 0xFF   // Byte value for all pins as HIGH (to be used with `portWrite()`)
+#define ALL_LOW 0x00    // Byte value for all pins as LOW (to be used with `portWrite()`)
 
 #define I2C_CONNECTION_OK 0
 
 class MCP23017
 {
-private:
-    byte address;
-
 public:
-    MCP23017(byte address)
+    /**
+     * @brief Construct a new MCP23017 object
+     *
+     * @param i2c_address The actual I2C address of the MCP23017 chip
+     */
+    MCP23017(byte i2c_address)
     {
-        this->address = address;
+        this->i2c_address = i2c_address;
     };
 
+    /**
+     * @brief Construct a new MCP23017 object
+     *
+     * @param a0 State of the A0 pin of the MCP23017 chip (HIGH or LOW)
+     * @param a1 State of the A1 pin of the MCP23017 chip (HIGH or LOW)
+     * @param a2 State of the A2 pin of the MCP23017 chip (HIGH or LOW)
+     */
     MCP23017(byte a0, byte a1, byte a2)
     {
-        this->address = 0x20 | (a0 << 0) | (a1 << 1) | (a2 << 2);
+        this->i2c_address = 0x20 | (a0 << 0) | (a1 << 1) | (a2 << 2);
     };
 
+    /**
+     * @brief Set the port mode (input or output)
+     *
+     * @param port Port to configure (PORTA or PORTB)
+     * @param mode A byte to set individual pins as input or output (0 = output, 1 = input)
+                   Can also use the predefined macros ALL_OUTPUT or ALL_INPUT
+     */
     void portMode(MCP23017ConfPort port, byte mode)
     {
         do
         {
-            Wire.beginTransmission(address);
+            Wire.beginTransmission(i2c_address);
             Wire.write(port);
             Wire.write(mode);
         } while (Wire.endTransmission() != I2C_CONNECTION_OK);
     };
+
+    /**
+     * @brief Writes a byte value to the specified port.
+     *
+     * @param port Either PORTA/GPIOA or PORTB/GPIOB
+     * @param value A byte value to write to the port (can also use predefined macros ALL_HIGH or ALL_LOW)
+     */
     void portWrite(MCP23017ConfPort port, byte value)
     {
         byte registerAddr;
@@ -78,22 +103,27 @@ public:
             registerAddr = GPIOB;
             break;
         }
-        do
-        {
-            Wire.beginTransmission(address);
-            Wire.write(registerAddr);
-            Wire.write(value);
-        } while (Wire.endTransmission() != I2C_CONNECTION_OK);
+        write(registerAddr, value);
     };
     void portWrite(MCP23017RegisterAddr registerAddr, byte value)
     {
+        write(registerAddr, value);
+    };
+    byte getI2CAddress()
+    {
+        return i2c_address;
+    };
+
+private:
+    byte i2c_address;
+    void write(byte registerAddr, byte value)
+    {
         do
         {
-            Wire.beginTransmission(address);
+            Wire.beginTransmission(i2c_address);
             Wire.write(registerAddr);
             Wire.write(value);
         } while (Wire.endTransmission() != I2C_CONNECTION_OK);
     };
-    uint8_t digitalRead(uint8_t pin);
 };
 #endif

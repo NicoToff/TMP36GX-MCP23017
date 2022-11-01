@@ -15,7 +15,7 @@
 #define YELLOW_LED2 GPA1
 #define RED_LED GPA0
 
-float getTempC(byte pin, int offset = 0, float maxVoltage = 3.3, int resolution = 4096)
+float getTempC(byte pin, int offset = 0, double maxVoltage = 3.3, int resolution = 4096)
 {
     uint16_t read = analogRead(TMP36) + offset;
     float voltage = (float)read * (maxVoltage / resolution);
